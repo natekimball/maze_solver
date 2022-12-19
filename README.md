@@ -1,5 +1,5 @@
 # Maze Solver
-Over-engineered maze solving algorithms written in rust.
+Maze solving algorithms written in rust.
 
 ## Examples
 
