@@ -3,6 +3,7 @@ use std::{env::args, collections::HashMap};
 
 use crate::maze::Element;
 
+//returns the proper stategy for maze solving
 pub fn solution_method_factory() -> fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
     let args = args().collect::<Vec<String>>();
     if args.contains(&String::from("-s")) || args.contains(&String::from("--shortest")) {
@@ -14,6 +15,7 @@ pub fn solution_method_factory() -> fn (maze: &mut Vec<Vec<Element>>, start: usi
     }
 }
 
+// breadth first search
 fn find_shortest_path(maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
     let mut parents = HashMap::new();
     let mut queue = Queue::new();
@@ -61,6 +63,7 @@ fn set_path(maze: &mut Vec<Vec<Element>>, parents: &HashMap<(usize, usize), (usi
     maze.iter_mut().for_each(|row| row.iter_mut().for_each(|e| if *e == Element::Visiting {*e = Element::Empty;}));
 }
 
+// comprehensive depth first search
 fn find_all_paths(maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
     let result = all_paths(maze, 0, start);
     maze[0][start] = Element::Start;
@@ -86,6 +89,7 @@ fn all_paths(maze: &mut Vec<Vec<Element>>, i: usize, j: usize) -> bool {
     maze[i][j] == Element::Path
 }
 
+//depth first search
 fn find_path(maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
     let result = path(maze, 0, start);
     maze[0][start] = Element::Start;

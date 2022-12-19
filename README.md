@@ -6,8 +6,7 @@ Maze solving algorithms written in rust.
 ### Maze input example
 ```
 resources/21x60maze.txt:
-``` 
-```
+
 XXSXXXXXX     XXXXX   XXXXXXXXXX     XXXXXXXXXXXXXXXXXXXXX X
 XX XXXX   XXX XXXXX X XXX     X  XXX          XXX       XX X
    XXX  X   X       X     XXXXX XX XX XXX XXX XXX XXXXX X  X
