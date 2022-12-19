@@ -3,9 +3,9 @@ use std::{env::args, fs, fmt::{Display, self}};
 use crate::maze_solver;
 
 pub struct Maze {
-    pub maze: Vec<Vec<Element>>,
-    pub start: usize,
-    pub solution_method: fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool
+    maze: Vec<Vec<Element>>,
+    start: usize,
+    solution_method: fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool
     // functional composition, strategy method is determined at runtime by a factory method
 }
 
@@ -17,6 +17,7 @@ impl Maze {
     }
 
     pub fn solve(&mut self) {
+        println!("maze:");
         println!("{self}");
         if (self.solution_method)(&mut self.maze, self.start) {
             println!("solution:");
@@ -55,6 +56,7 @@ pub enum Element {
     Path,
     Visiting
 }
+
 impl Display for Element {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
@@ -68,7 +70,7 @@ impl Display for Element {
     }
 }
 
-pub fn create_maze() -> (Vec<Vec<Element>>, usize) {
+fn create_maze() -> (Vec<Vec<Element>>, usize) {
     let args = args().collect::<Vec<String>>();
     if args.contains(&String::from("-f")) {
         let index = args.iter().position(|x| x == "-f").unwrap();
