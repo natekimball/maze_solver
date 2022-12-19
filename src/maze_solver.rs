@@ -1,6 +1,3 @@
-// #[macro_use]
-// extern crate queues;
-
 use queues::*;
 use std::{env::args, collections::HashMap};
 
@@ -19,9 +16,7 @@ pub fn solve(maze: &
 }
 
 fn find_shortest_path(maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
-    // how do i create an unweighted queue
     let mut parents = HashMap::new();
-    // let mut queue = Vec::new();
     let mut queue = Queue::new();
     queue.add((0,start)).unwrap();
 
@@ -56,11 +51,14 @@ fn set_path(maze: &mut Vec<Vec<Element>>, parents: &HashMap<(usize, usize), (usi
         panic!("not end");
     }
     (i,j) = parents[&c];
+    let mut x = 1;
     while maze[i][j] != Element::Start {
+        x+=1;
         // println!("maze[{i}][{j}]={:?}", maze[i][j]);
         maze[i][j] = Element::Path;
         (i,j) = parents[&(i,j)];
     }
+    println!("shortest path length: {}", x);
     maze.iter_mut().for_each(|row| row.iter_mut().for_each(|e| if *e == Element::Visiting {*e = Element::Empty;}));
 }
 

@@ -1,5 +1,3 @@
-// OOPize
-
 use std::{env::args, fs};
 
 #[derive(Debug, PartialEq, Clone, Copy)]

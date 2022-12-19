@@ -7,7 +7,7 @@ fn main() {
     maze::display(&maze);
 
     if maze_solver::solve(&mut maze, start) {
-        println!("solved");
+        println!("solution:");
         maze::display(&maze);
     } else {
         println!("no solution");
