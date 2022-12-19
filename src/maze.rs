@@ -1,4 +1,50 @@
-use std::{env::args, fs};
+use std::{env::args, fs, fmt::{Display, self}};
+
+use crate::maze_solver;
+
+pub struct Maze {
+    pub maze: Vec<Vec<Element>>,
+    pub start: usize,
+    pub solution_method: fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool
+    // functional composition, strategy method is determined at runtime by a factory method
+}
+
+impl Maze {
+    pub fn new() -> Maze {
+        let (maze, start) = create_maze();
+        let solution_method = maze_solver::solution_method_factory();
+        Maze { maze, start, solution_method }
+    }
+
+    pub fn solve(&mut self) {
+        println!("{self}");
+        if (self.solution_method)(&mut self.maze, self.start) {
+            println!("solution:");
+            println!("{self}");
+        } else {
+            println!("no solution");
+        }
+    }
+}
+
+impl Display for Maze {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let output = self.maze.iter().map(|row| {
+            row.iter().map(|element| {
+                match element {
+                    Element::Start => "S",
+                    Element::End => "E",
+                    Element::Wall => "X",
+                    Element::Empty => " ",
+                    Element::Path => "|",
+                    _ => "?",
+                }
+            }).collect::<Vec<&str>>().join("")
+        }).collect::<Vec<String>>().join("\n");
+        write!(f, "{}", output)
+    }
+}
+
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 pub enum Element {
@@ -9,20 +55,16 @@ pub enum Element {
     Path,
     Visiting
 }
-
-pub fn display(maze: &Vec<Vec<Element>>) {
-    for i in 0..maze.len() {
-        for j in 0..maze[i].len() {
-            match maze[i][j] {
-                Element::Start => print!("S"),
-                Element::End => print!("E"),
-                Element::Wall => print!("X"),
-                Element::Empty => print!(" "),
-                Element::Path => print!("|"),
-                _ => print!("?"),
-            }
+impl Display for Element {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Element::Start => write!(f, "S"),
+            Element::End => write!(f, "E"),
+            Element::Wall => write!(f, "X"),
+            Element::Empty => write!(f, " "),
+            Element::Path => write!(f, "|"),
+            Element::Visiting => write!(f, "?"),
         }
-        println!();
     }
 }
 

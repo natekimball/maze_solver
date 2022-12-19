@@ -3,15 +3,14 @@ use std::{env::args, collections::HashMap};
 
 use crate::maze::Element;
 
-pub fn solve(maze: &
-    mut Vec<Vec<Element>>, start: usize) -> bool {
+pub fn solution_method_factory() -> fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
     let args = args().collect::<Vec<String>>();
-    if args.contains(&String::from("-a")) || args.contains(&String::from("--any")) {
-        find_path(maze, start)
-    } else if args.contains(&String::from("-s")) || args.contains(&String::from("--shortest")) {
-        find_shortest_path(maze, start)
+    if args.contains(&String::from("-s")) || args.contains(&String::from("--shortest")) {
+        find_shortest_path
+    } else if args.contains(&String::from("-a")) || args.contains(&String::from("--any")) {
+        find_path
     } else {
-        find_all_paths(maze, start)
+        find_all_paths
     }
 }
 
