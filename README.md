@@ -1,12 +1,12 @@
 # Maze Solver
-Over engineered maze solving algorithms written in rust.
+Over-engineered maze solving algorithms written in rust.
 
 ## Examples
 
 ### Maze input example
 ```
 resources/21x60maze.txt:
-```
+``` 
 ```
 XXSXXXXXX     XXXXX   XXXXXXXXXX     XXXXXXXXXXXXXXXXXXXXX X
 XX XXXX   XXX XXXXX X XXX     X  XXX          XXX       XX X
@@ -42,7 +42,7 @@ $ cargo run . -f resources/13x7maze.txt -s
 ```
 $ cargo run . -f resources/13x7maze.txt -a
 ```
-### Shortest Path Output example
+### Shortest Path Output Example
 ```
 shortest path length: 77
 solution:
