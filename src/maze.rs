@@ -1,29 +1,19 @@
 use std::{env::args, fs, fmt::{Display, self}};
 
-use crate::maze_solver;
-
 pub struct Maze {
-    maze: Vec<Vec<Element>>,
-    start: usize,
-    solution_method: fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool
-    // functional composition, strategy method is determined at runtime by a factory method
+    pub maze: Vec<Vec<Element>>,
+    pub start: usize,
 }
 
 impl Maze {
     pub fn new() -> Maze {
-        let (maze, start) = create_maze();
-        let solution_method = maze_solver::solution_method_factory();
-        Maze { maze, start, solution_method }
-    }
-
-    pub fn solve(&mut self) {
-        println!("maze:");
-        println!("{self}");
-        if (self.solution_method)(&mut self.maze, self.start) {
-            println!("solution:");
-            println!("{self}");
+        let args = args().collect::<Vec<String>>();
+        if args.contains(&String::from("-f")) {
+            let index = args.iter().position(|x| x == "-f").unwrap();
+            let file = args.get(index+1).expect("no file specified");
+            maze_from_file(file)
         } else {
-            println!("no solution");
+            maze_from_file("resources/21x60maze.txt")
         }
     }
 }
@@ -70,18 +60,7 @@ impl Display for Element {
     }
 }
 
-fn create_maze() -> (Vec<Vec<Element>>, usize) {
-    let args = args().collect::<Vec<String>>();
-    if args.contains(&String::from("-f")) {
-        let index = args.iter().position(|x| x == "-f").unwrap();
-        let file = args.get(index+1).expect("no file specified");
-        maze_from_file(file)
-    } else {
-        maze_from_file("resources/21x60maze.txt")
-    }
-}
-
-fn maze_from_file(arg: &str) -> (Vec<Vec<Element>>, usize) {
+fn maze_from_file(arg: &str) -> Maze {
     let content = fs::read_to_string(arg).expect("file not found");
     let mut start = 0;
     let mut end = 0;
@@ -105,5 +84,5 @@ fn maze_from_file(arg: &str) -> (Vec<Vec<Element>>, usize) {
     if maze[0][start] != Element::Start || maze[maze.len()-1][end] != Element::End {
         panic!("invalid maze. start or end not found");
     }
-    (maze, start)
+    Maze{maze, start}
 }

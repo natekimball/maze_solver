@@ -1,17 +1,39 @@
 use queues::*;
 use std::{env::args, collections::HashMap};
 
-use crate::maze::Element;
+use crate::maze::{Element, Maze};
 
-//returns the proper stategy for maze solving
-pub fn solution_method_factory() -> fn (maze: &mut Vec<Vec<Element>>, start: usize) -> bool {
+pub trait MazeSolver {
+    fn solve(&self, maze: &mut Maze) -> bool;
+}
+
+pub struct ShortestPathSolver;
+impl MazeSolver for ShortestPathSolver {
+    fn solve(&self, maze: &mut Maze) -> bool {
+        find_shortest_path(&mut maze.maze, maze.start)
+    }
+}
+pub struct AnyPathSolver;
+impl MazeSolver for AnyPathSolver {
+    fn solve(&self, maze: &mut Maze) -> bool {
+        find_path(&mut maze.maze, maze.start)
+    }
+}
+pub struct AllPathsSolver;
+impl MazeSolver for AllPathsSolver {
+    fn solve(&self, maze: &mut Maze) -> bool {
+        find_all_paths(&mut maze.maze, maze.start)
+    }
+}
+
+pub fn strategy_factory() -> Box<dyn MazeSolver> {
     let args = args().collect::<Vec<String>>();
     if args.contains(&String::from("-s")) || args.contains(&String::from("--shortest")) {
-        find_shortest_path
+        Box::new(ShortestPathSolver)
     } else if args.contains(&String::from("-a")) || args.contains(&String::from("--any")) {
-        find_path
+        Box::new(AnyPathSolver)
     } else {
-        find_all_paths
+        Box::new(AllPathsSolver)
     }
 }
 
